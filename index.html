@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mr X Irruminant room 😈😈</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0d0d0d;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    .header {
+      padding-top: 20px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: #555;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+    }
+
+    .app-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #ff00cc;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background: #1a1a1a;
+      margin: 10px 15px;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 0 10px #111;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #ff66ff;
+    }
+
+    .server-btn {
+      display: block;
+      background: #333;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      background: #222;
+      color: #0f0;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    button.convert-btn {
+      background: #00ffcc;
+      color: #000;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+    .contact-btn {
+      background: #ff00cc;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      margin: 20px auto;
+      font-size: 15px;
+      width: 90%;
+      display: block;
+      font-weight: bold;
+    }
+
+    .output {
+      margin-top: 10px;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    @media (max-width: 480px) {
+      .app-title { font-size: 18px; }
+      .server-btn, .contact-btn { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo"></div>
+    <div class="app-title">Mr X Irruminant room 😈😈</div>
+  </div>
+
+  <div class="section">
+    <h2>Text ➤ Binary</h2>
+    <input type="text" id="textInput" placeholder="Andika maneno hapa...">
+    <button class="convert-btn" onclick="textToBinary()">Convert</button>
+    <div class="output" id="binaryOutput"></div>
+  </div>
+
+  <div class="section">
+    <h2>Binary ➤ Text</h2>
+    <textarea id="binaryInput" placeholder="Mfano: 01001000 01100101 01101100 01101100 01101111"></textarea>
+    <button class="convert-btn" onclick="binaryToText()">Convert</button>
+    <div class="output" id="textOutput"></div>
+  </div>
+
+  <button class="contact-btn" onclick="window.open('https://wa.me/255775710774','_blank')">
+    Contact Mr X Developer
+  </button>
+
+  <script>
+    function textToBinary() {
+      const text = document.getElementById("textInput").value;
+      let binary = '';
+      for (let i = 0; i < text.length; i++) {
+        binary += text[i].charCodeAt(0).toString(2).padStart(8, '0') + ' ';
+      }
+      document.getElementById("binaryOutput").innerText = binary.trim();
+    }
+
+    function binaryToText() {
+      const binaryInput = document.getElementById("binaryInput").value.trim();
+      const binaryArray = binaryInput.split(' ');
+      let text = '';
+      for (let bin of binaryArray) {
+        if (bin.length === 8) {
+          text += String.fromCharCode(parseInt(bin, 2));
+        }
+      }
+      document.getElementById("textOutput").innerText = text;
+    }
+  </script>
+</body>
+</html>
